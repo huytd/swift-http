@@ -49,16 +49,17 @@ public class HTTP {
       let clientSocket = accept(serverSocket, nil, nil)
 
       let msg = "Hello World"
+      let contentLength = msg.utf8.count
 
       echo(clientSocket, "HTTP/1.1 200 OK\n")
       echo(clientSocket, "Server: Swift Web Server\n")
-      echo(clientSocket, "Content-length: \(msg.characters.count)\n")
+      echo(clientSocket, "Content-length: \(contentLength)\n")
       echo(clientSocket, "Content-type: text-plain\n")
       echo(clientSocket, "\r\n")
 
       echo(clientSocket, msg)
 
-      print("Response sent: '\(msg)' - Length: \(msg.characters.count)")
+      print("Response sent: '\(msg)' - Length: \(contentLength)")
 
       close(clientSocket)
     }

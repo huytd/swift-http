@@ -22,7 +22,29 @@ Now, go to [http://localhost:8080](http://localhost:8080) to test, the response 
 
 ---
 
-# Setting up Docker container for Swift
+# Setting up Docker container from Dockerfile
+
+Go to `docker` folder and run `build.sh` to build `swiftbox` image
+
+```
+cd docker
+./build.sh
+```
+
+Run new container from `swiftbox` image, mount your working directory and expose the port:
+
+```
+docker run -it -p 8080:8080 -v /path/to/your/host/working/folder:/src swiftbox
+```
+
+Now you can go to `/src` folder, which linked to your `/path/to/your/host/working/folder` to start using:
+
+```
+cd /src
+swift build
+```
+
+# Setting up Docker container for Swift yourself
 
 Create new `ubuntu` container, don't forget to expose port `8080` or whatever you want, to test the HTTP server
 
@@ -65,3 +87,7 @@ Now, you have Swift installed, test it with the following command:
 ```
 swift --version
 ```
+
+# License
+
+The source code is published under MIT license. Please see `LICENSE.md` for more detail.

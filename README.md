@@ -2,6 +2,8 @@
 
 Simple HTTP implementation for Swift using POSIX socket API. Running on **Mac OS X** and **Linux**.
 
+**For Mac users: ** You can install new Swift compiler following [this instruction](https://swift.org/download/#apple-platforms) then you will be able to build the code directly on your Xcode.
+
 ## Compile
 
 Run the following command to compile the source:

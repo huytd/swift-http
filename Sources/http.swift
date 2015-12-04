@@ -20,11 +20,23 @@ public class HTTP {
 }
 
   init(port: UInt16) {
+    #if os(Linux)
+    serverSocket = socket(AF_INET, Int32(SOCK_STREAM.rawValue), 0)
+    #else
     serverSocket = socket(AF_INET, Int32(SOCK_STREAM), 0)
+    #endif
     if (serverSocket > 0) {
       print("Socket init: OK")
     }
 
+    #if os(Linux)
+    serverAddress = sockaddr_in(
+      sin_family: sa_family_t(AF_INET),
+      sin_port: htons(port),
+      sin_addr: in_addr(s_addr: in_addr_t(0)),
+      sin_zero: (0, 0, 0, 0, 0, 0, 0, 0)
+    )
+    #else
     serverAddress = sockaddr_in(
       sin_len: __uint8_t(sizeof(sockaddr_in)),
       sin_family: sa_family_t(AF_INET),
@@ -32,6 +44,7 @@ public class HTTP {
       sin_addr: in_addr(s_addr: in_addr_t(0)),
       sin_zero: (0, 0, 0, 0, 0, 0, 0, 0)
     )
+    #endif
 
     setsockopt(serverSocket, SOL_SOCKET, SO_RCVBUF, &bufferSize, socklen_t(sizeof(Int)))
 

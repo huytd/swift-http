@@ -15,7 +15,7 @@ swift build
 After successfully compile, run the server with:
 
 ```
-.build/debug/http
+.build/debug/swift-http
 ```
 
 Now, go to [http://localhost:8080](http://localhost:8080) to test, the response should be: `Hello World`

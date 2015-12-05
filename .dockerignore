@@ -1,0 +1,7 @@
+.git
+
+# Xcode
+.DS_Store
+.idea/
+*.hmap
+*.xccheckout

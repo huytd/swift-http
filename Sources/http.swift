@@ -15,9 +15,9 @@ public class HTTP {
 
   func echo(socket: Int32, _ output: String) {
    output.withCString { (bytes) in
-       send(socket, bytes, Int(strlen(bytes)), 0)
+      send(socket, bytes, Int(strlen(bytes)), 0)
    }
-}
+  }
 
   init(port: UInt16) {
     #if os(Linux)
@@ -32,7 +32,7 @@ public class HTTP {
     #if os(Linux)
     serverAddress = sockaddr_in(
       sin_family: sa_family_t(AF_INET),
-      sin_port: htons(port),
+      sin_port: port.htons(),
       sin_addr: in_addr(s_addr: in_addr_t(0)),
       sin_zero: (0, 0, 0, 0, 0, 0, 0, 0)
     )
@@ -40,7 +40,7 @@ public class HTTP {
     serverAddress = sockaddr_in(
       sin_len: __uint8_t(sizeof(sockaddr_in)),
       sin_family: sa_family_t(AF_INET),
-      sin_port: htons(port),
+      sin_port: port.htons(),
       sin_addr: in_addr(s_addr: in_addr_t(0)),
       sin_zero: (0, 0, 0, 0, 0, 0, 0, 0)
     )
@@ -52,10 +52,6 @@ public class HTTP {
     if (serverBind >= 0) {
       print("Server started at port \(port)")
     }
-  }
-    
-  func htons(value: CUnsignedShort) -> CUnsignedShort {
-    return (value << 8) + (value >> 8);
   }
 
   func start() {
@@ -82,4 +78,8 @@ public class HTTP {
       close(clientSocket)
     }
   }
+}
+
+extension CUnsignedShort {
+  func htons() -> CUnsignedShort { return (self << 8) + (self >> 8); }
 }

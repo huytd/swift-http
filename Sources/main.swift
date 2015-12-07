@@ -8,10 +8,10 @@ import Foundation
 
 let environment = NSProcessInfo.processInfo().environment
 var port = environment["PORT"]
-if port == nil || port == "" {
+if port == nil || port!.isEmpty {
     port = "8080"
 }
 let portInt = UInt16(port!)
 
-var http = HTTP(port: portInt!)
+let http = HTTP(port: portInt!)
 http.start()

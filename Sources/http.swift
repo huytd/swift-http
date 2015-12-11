@@ -79,12 +79,14 @@ public class HTTP {
       echo(clientSocket, "Server: Swift Web Server\n")
       echo(clientSocket, "Content-length: \(contentLength)\n")
       echo(clientSocket, "Content-type: text-plain\n")
+      echo(clientSocket, "Connection: close\n")
       echo(clientSocket, "\r\n")
 
       echo(clientSocket, msg)
 
       print("Response sent: '\(msg)' - Length: \(contentLength)")
 
+      shutdown(clientSocket, Int32(SHUT_RDWR))
       close(clientSocket)
     }
   }

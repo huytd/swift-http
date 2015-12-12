@@ -15,7 +15,12 @@ public class HTTP {
 
   func echo(socket: Int32, _ output: String) {
    output.withCString { (bytes) in
-      send(socket, bytes, Int(strlen(bytes)), 0)
+      #if os(Linux)
+      let flags = Int32(MSG_NOSIGNAL)
+      #else
+      let flags = Int32(0)
+      #endif
+      send(socket, bytes, Int(strlen(bytes)), flags)
    }
   }
 
@@ -48,6 +53,11 @@ public class HTTP {
 
     setsockopt(serverSocket, SOL_SOCKET, SO_RCVBUF, &bufferSize, socklen_t(sizeof(Int)))
 
+    #if !os(Linux)
+    var noSigPipe : Int32 = 1
+    setsockopt(serverSocket, SOL_SOCKET, SO_NOSIGPIPE, &noSigPipe, socklen_t(sizeofValue(noSigPipe)))
+    #endif
+
     let serverBind = bind(serverSocket, sockaddr_cast(&serverAddress), socklen_t(UInt8(sizeof(sockaddr_in))))
     if (serverBind >= 0) {
       print("Server started at port \(port)")
@@ -69,12 +79,14 @@ public class HTTP {
       echo(clientSocket, "Server: Swift Web Server\n")
       echo(clientSocket, "Content-length: \(contentLength)\n")
       echo(clientSocket, "Content-type: text-plain\n")
+      echo(clientSocket, "Connection: close\n")
       echo(clientSocket, "\r\n")
 
       echo(clientSocket, msg)
 
       print("Response sent: '\(msg)' - Length: \(contentLength)")
 
+      shutdown(clientSocket, Int32(SHUT_RDWR))
       close(clientSocket)
     }
   }

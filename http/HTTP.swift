@@ -13,6 +13,25 @@ public class HTTP {
     return UnsafeMutablePointer<sockaddr>(p)
   }
 
+  public func send_http(socket: Int32, _ output: String, content_type: String = "text/html; charset=UTF-8", status_code: String = "200 OK") {
+    let contentLength = output.utf8.count
+
+    send_http_header(socket, code: status_code, content_length: "\(contentLength)", type: content_type)
+    echo(socket, output)
+
+    print("Response sent: '\(output)' - Length: \(contentLength)")
+
+  }
+
+  public func send_http_header(socket: Int32, code: String = "200 OK", server_name: String = "Swift Web Server", content_length: String, type: String = "text-plain") {
+    echo(socket, "HTTP/1.1 \(code)\n")
+    echo(socket, "Server: \(server_name)\n")
+    echo(socket, "Content-length: \(content_length)\n")
+    echo(socket, "Content-type: \(type)\n")
+    echo(socket, "Connection: close\n")
+    echo(socket, "\r\n")
+  } 
+
   public func echo(socket: Int32, _ output: String) {
    output.withCString { (bytes) in
       #if os(Linux)

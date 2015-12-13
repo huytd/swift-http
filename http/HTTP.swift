@@ -5,15 +5,15 @@
 #endif
 
 public class HTTP {
-  var   serverSocket : Int32 = 0
-  var  serverAddress : sockaddr_in?
+  public var   serverSocket : Int32 = 0
+  public var  serverAddress : sockaddr_in?
   var     bufferSize : Int = 1024
 
   func sockaddr_cast(p: UnsafeMutablePointer<Void>) -> UnsafeMutablePointer<sockaddr> {
     return UnsafeMutablePointer<sockaddr>(p)
   }
 
-  func echo(socket: Int32, _ output: String) {
+  public func echo(socket: Int32, _ output: String) {
    output.withCString { (bytes) in
       #if os(Linux)
       let flags = Int32(MSG_NOSIGNAL)
@@ -24,7 +24,7 @@ public class HTTP {
    }
   }
 
-  init(port: UInt16) {
+  public init(port: UInt16) {
     #if os(Linux)
     serverSocket = socket(AF_INET, Int32(SOCK_STREAM.rawValue), 0)
     #else
@@ -61,33 +61,6 @@ public class HTTP {
     let serverBind = bind(serverSocket, sockaddr_cast(&serverAddress), socklen_t(UInt8(sizeof(sockaddr_in))))
     if (serverBind >= 0) {
       print("Server started at port \(port)")
-    }
-  }
-
-  func start() {
-    while (true) {
-      if (listen(serverSocket, 10) < 0) {
-        exit(1)
-      }
-
-      let clientSocket = accept(serverSocket, nil, nil)
-
-      let msg = "Hello World"
-      let contentLength = msg.utf8.count
-
-      echo(clientSocket, "HTTP/1.1 200 OK\n")
-      echo(clientSocket, "Server: Swift Web Server\n")
-      echo(clientSocket, "Content-length: \(contentLength)\n")
-      echo(clientSocket, "Content-type: text-plain\n")
-      echo(clientSocket, "Connection: close\n")
-      echo(clientSocket, "\r\n")
-
-      echo(clientSocket, msg)
-
-      print("Response sent: '\(msg)' - Length: \(contentLength)")
-
-      shutdown(clientSocket, Int32(SHUT_RDWR))
-      close(clientSocket)
     }
   }
 }

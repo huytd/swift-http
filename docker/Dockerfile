@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --force-yes \
         libicu52 && \
         apt-get clean
 RUN cd /
-RUN wget https://swift.org/builds/ubuntu1404/swift-2.2-SNAPSHOT-2015-12-01-b/swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu14.04.tar.gz && \
-    tar xzf swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu14.04.tar.gz && \
-    rsync -a -v swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu14.04/usr/ /usr && \
-    rm -rf swift-2.2-SNAPSHOT-2015-12-01-b-ubuntu14.04*
+RUN wget https://swift.org/builds/ubuntu1404/swift-2.2-SNAPSHOT-2015-12-10-a/swift-2.2-SNAPSHOT-2015-12-10-a-ubuntu14.04.tar.gz && \
+    tar xzf swift-2.2-SNAPSHOT-2015-12-10-a-ubuntu14.04.tar.gz && \
+    rsync -a -v swift-2.2-SNAPSHOT-2015-12-10-a-ubuntu14.04/usr/ /usr && \
+    rm -rf swift-2.2-SNAPSHOT-2015-12-10-a-ubuntu14.04*

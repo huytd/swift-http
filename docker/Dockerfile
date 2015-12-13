@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --force-yes \
         rsync \
         libpython-all-dev \
         libedit-dev \
+	libxml2-dev \
         libicu52 && \
         apt-get clean
 RUN cd /

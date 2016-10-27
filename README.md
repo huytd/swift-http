@@ -92,4 +92,4 @@ swift --version
 
 # License
 
-The source code is published under MIT license. Please see `LICENSE.md` for more detail.
+The source code is published under MIT license. Please see [`LICENSE.md`](LICENSE.md) for more detail.

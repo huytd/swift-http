@@ -8,7 +8,7 @@ import Foundation
 
 import http
 
-let environment = NSProcessInfo.processInfo().environment
+let enviroment = ProcessInfo.processInfo.environment
 var port = environment["PORT"]
 if port == nil || port!.isEmpty {
     port = "8080"

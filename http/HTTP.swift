@@ -16,7 +16,7 @@ public class HTTP {
   public func send_http(socket: Int32, _ output: String, content_type: String = "text/html; charset=UTF-8", status_code: String = "200 OK") {
     let contentLength = output.utf8.count
 
-    send_http_header(socket, code: status_code, content_length: "\(contentLength)", type: content_type)
+    send_http_header(socket: socket, code: status_code, content_length: "\(contentLength)", type: content_type)
     echo(socket, output)
 
     print("Response sent: '\(output)' - Length: \(contentLength)")
@@ -62,7 +62,7 @@ public class HTTP {
     )
     #else
     serverAddress = sockaddr_in(
-      sin_len: __uint8_t(sizeof(sockaddr_in)),
+      sin_len: __uint8_t(MemoryLayout.size(ofValue: sockaddr_in.self)),
       sin_family: sa_family_t(AF_INET),
       sin_port: port.htons(),
       sin_addr: in_addr(s_addr: in_addr_t(0)),
@@ -70,14 +70,14 @@ public class HTTP {
     )
     #endif
 
-    setsockopt(serverSocket, SOL_SOCKET, SO_RCVBUF, &bufferSize, socklen_t(sizeof(Int)))
+    setsockopt(serverSocket, SOL_SOCKET, SO_RCVBUF, &bufferSize, socklen_t(MemoryLayout.size(ofValue: Int.self)))
 
     #if !os(Linux)
     var noSigPipe : Int32 = 1
-    setsockopt(serverSocket, SOL_SOCKET, SO_NOSIGPIPE, &noSigPipe, socklen_t(sizeofValue(noSigPipe)))
+    setsockopt(serverSocket, SOL_SOCKET, SO_NOSIGPIPE, &noSigPipe, socklen_t(MemoryLayout.size(ofValue: noSigPipe)))
     #endif
 
-    let serverBind = bind(serverSocket, sockaddr_cast(&serverAddress), socklen_t(UInt8(sizeof(sockaddr_in))))
+    let serverBind = bind(serverSocket, sockaddr_cast(p: &serverAddress), socklen_t(UInt8(MemoryLayout.size(ofValue: sockaddr_in.self))))
     if (serverBind >= 0) {
       print("Server started at port \(port)")
     }
